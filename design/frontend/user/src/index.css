@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   --primary: #00b894;
   --primary-gradient: linear-gradient(135deg, #00b894 0%, #00cec9 100%);

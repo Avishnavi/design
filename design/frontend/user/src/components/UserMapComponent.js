@@ -81,31 +81,42 @@ const UserMapComponent = ({ userLocation, collectorLocation, isSelectionMode, on
         map.current = null;
       }
     };
-  }, [isSelectionMode]);
+  }, [isSelectionMode, userLocation]); // Fixed dependency
 
   return (
-    <div className="map-with-search">
+    <div className="map-with-search-enhanced">
       {isSelectionMode && (
-        <div className="map-search-container">
-          <input 
-            type="text" 
-            placeholder="🔍 Search for your address..." 
-            className="map-search-input"
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
+        <div className="search-layer">
+          <div className="search-bar-wrapper">
+            <span className="search-icon">🔍</span>
+            <input 
+              type="text" 
+              placeholder="Search for your locality or building..." 
+              className="search-input-fancy"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+            {searchQuery && (
+              <button className="clear-search" onClick={() => {setSearchQuery(''); setSearchResults([]);}}>✕</button>
+            )}
+          </div>
+          
           {searchResults.length > 0 && (
-            <div className="search-results-dropdown">
+            <div className="search-dropdown-fancy">
               {searchResults.map((res, i) => (
-                <div key={i} className="search-result-item" onClick={() => selectAddress(res)}>
-                  {res.display_name}
+                <div key={i} className="search-item-fancy" onClick={() => selectAddress(res)}>
+                  <span className="pin-icon">📍</span>
+                  <div className="item-text">
+                    <p className="main-text">{res.display_name.split(',')[0]}</p>
+                    <p className="sub-text">{res.display_name.split(',').slice(1).join(',')}</p>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
       )}
-      <div ref={mapContainer} style={{ width: '100%', height: '250px', borderRadius: '16px', marginBottom: '1.5rem', cursor: isSelectionMode ? 'crosshair' : 'default' }} />
+      <div ref={mapContainer} className="mini-map-frame" style={{ width: '100%', height: '280px', borderRadius: '24px', cursor: isSelectionMode ? 'crosshair' : 'default' }} />
     </div>
   );
 };

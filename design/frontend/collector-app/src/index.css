@@ -18,7 +18,11 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: radial-gradient(circle at top right, #e3f2fd, #f9fbfd);
   color: var(--text-main);
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Ensure no scrollbars on the body itself */
 }
 
 .card {
@@ -30,10 +34,12 @@ body {
 }
 
 .container {
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
+  padding: 24px;
+  width: 100%;
+  max-width: 100%; /* Fully expand the dashboard */
+  margin: 0;
   padding-bottom: 80px; 
+  box-sizing: border-box;
 }
 
 /* Status Banner */

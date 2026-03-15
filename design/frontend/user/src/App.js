@@ -44,10 +44,13 @@ function App() {
     if (isLoggedIn) {
       fetchProfile();
       fetchHistory();
-      const interval = setInterval(fetchHistory, 20000);
+      
+      // Dynamic interval: 10s if pending, 60s otherwise to save resources
+      const intervalTime = history.some(p => p.status === 'Pending') ? 10000 : 60000;
+      const interval = setInterval(fetchHistory, intervalTime);
       return () => clearInterval(interval);
     }
-  }, [isLoggedIn, fetchProfile, fetchHistory]);
+  }, [isLoggedIn, fetchProfile, fetchHistory, history]);
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -87,88 +90,65 @@ function App() {
 
   if (!isLoggedIn) {
     return (
-      <div className="login-screen">
-        <div className="login-header">
-          <div className="logo-icon">♻️</div>
-          <h1>WasteWise</h1>
-          <p>Join the circular economy</p>
+      <div className="login-split-container">
+        <div className="login-hero-side">
+          <div className="hero-content">
+            <div className="logo-icon-lg">♻️</div>
+            <h1>WasteWise</h1>
+            <p>Join the circular economy. Manage your waste smarter, faster, and greener.</p>
+          </div>
         </div>
         
-        <div className="login-card">
-          <h2>{isRegistering ? 'Create Account' : 'Welcome Back'}</h2>
-          <form className="login-form" onSubmit={handleAuth}>
-            {isRegistering && (
-              <div className="form-group">
-                <label>Full Name</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. John Doe" 
-                  onChange={e => setFormData({...formData, name: e.target.value})} 
-                  required 
-                  className="form-input" 
-                />
-              </div>
-            )}
+        <div className="login-form-side">
+          <div className="login-card-compact">
+            <h2>{isRegistering ? 'Create Account' : 'Welcome Back'}</h2>
             
-            <div className="form-group">
-              <label>Email Address</label>
-              <input 
-                type="email" 
-                placeholder="email@example.com" 
-                onChange={e => setFormData({...formData, email: e.target.value})} 
-                required 
-                className="form-input" 
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Password</label>
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                onChange={e => setFormData({...formData, password: e.target.value})} 
-                required 
-                className="form-input" 
-              />
-            </div>
-
-            {isRegistering && (
-              <>
+            <form className="login-form-grid" onSubmit={handleAuth}>
+              {isRegistering && (
                 <div className="form-group">
-                  <label>Phone Number</label>
-                  <input 
-                    type="text" 
-                    placeholder="10-digit number" 
-                    onChange={e => setFormData({...formData, phone: e.target.value})} 
-                    required 
-                    className="form-input" 
-                  />
+                  <label>Full Name</label>
+                  <input type="text" placeholder="John Doe" onChange={e => setFormData({...formData, name: e.target.value})} required className="form-input-sm" />
                 </div>
+              )}
+              
+              <div className="form-row">
+                <div className="form-group flex-1">
+                  <label>Email</label>
+                  <input type="email" placeholder="email@example.com" onChange={e => setFormData({...formData, email: e.target.value})} required className="form-input-sm" />
+                </div>
+                {isRegistering && (
+                  <div className="form-group flex-1">
+                    <label>Phone</label>
+                    <input type="text" placeholder="10-digit #" onChange={e => setFormData({...formData, phone: e.target.value})} required className="form-input-sm" />
+                  </div>
+                )}
+              </div>
+              
+              <div className="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" onChange={e => setFormData({...formData, password: e.target.value})} required className="form-input-sm" />
+              </div>
+
+              {isRegistering && (
                 <div className="form-group">
                   <label>Service Address</label>
-                  <input 
-                    type="text" 
-                    placeholder="Your primary address" 
-                    onChange={e => setFormData({...formData, address: e.target.value})} 
-                    required 
-                    className="form-input" 
-                  />
+                  <input type="text" placeholder="Your primary address" onChange={e => setFormData({...formData, address: e.target.value})} required className="form-input-sm" />
                 </div>
-              </>
-            )}
-            
-            <button type="submit" className="btn-auth" disabled={loading}>
-              {loading ? 'Processing...' : (isRegistering ? 'Sign Up' : 'Login')}
-            </button>
-          </form>
-          
-          <div className="auth-footer">
-            <p>
-              {isRegistering ? 'Already have an account?' : "Don't have an account?"}
-              <button className="btn-link" onClick={() => setIsRegistering(!isRegistering)}>
-                {isRegistering ? 'Login' : 'Create one'}
+              )}
+              
+              <button type="submit" className="btn-auth-compact" disabled={loading}>
+                {loading ? 'Processing...' : (isRegistering ? 'Sign Up' : 'Login')}
               </button>
-            </p>
+            </form>
+            
+            <div className="auth-footer-sm">
+              <p>
+                {isRegistering ? 'Have an account?' : "New here?"}
+                <button className="btn-link-sm" onClick={() => setIsRegistering(!isRegistering)}>
+                  {isRegistering ? 'Login' : 'Create one'}
+                </button>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -177,9 +157,33 @@ function App() {
 
   return (
     <div className="App user-theme">
-      <header className="app-top-bar">
-        <div className="logo-text">♻️ WasteWise</div>
-        <button className="btn-logout-sm" onClick={() => { localStorage.removeItem('token'); setIsLoggedIn(false); }}>Logout</button>
+      <header className="app-header-main">
+        <div className="header-left">
+          <div className="logo-section">
+            <span className="logo-emoji">♻️</span>
+            <div className="logo-brand">
+              <span className="brand-name">WasteWise</span>
+              <span className="brand-module-tag">User Portal</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="header-right">
+          {user && (
+            <div className="user-profile-brief">
+              <div className="user-avatar">
+                <span className="avatar-letter">{user.name?.charAt(0) || 'U'}</span>
+              </div>
+              <div className="user-info">
+                <span className="user-name">{user.name}</span>
+                <span className="user-eco-rank">Eco Citizen</span>
+              </div>
+            </div>
+          )}
+          <button className="btn-logout-new" onClick={() => { localStorage.removeItem('token'); setIsLoggedIn(false); }}>
+            Logout
+          </button>
+        </div>
       </header>
 
       {!showWizard ? (

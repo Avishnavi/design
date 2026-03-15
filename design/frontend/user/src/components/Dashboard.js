@@ -10,7 +10,7 @@ const Dashboard = ({ user, history, onRequestPickup, onTrackPickup, onViewHistor
   const totalEarnings = totalRecycled * 15; // Mock: ₹15 per kg
 
   return (
-    <div className="dashboard container">
+    <div className="dashboard-wrapper container">
       {/* User Header */}
       <header className="dashboard__header">
         <div className="user-profile-row">

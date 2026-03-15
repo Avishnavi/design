@@ -13,7 +13,7 @@ const assignCollector = async (pickupRequest) => {
     // Find available collectors near the pickup location
     // Note: This assumes collectors have a location set. 
     // If not, we might need a fallback.
-    const collectors = await Collector.find({
+    let collectors = await Collector.find({
       location: {
         $near: {
           $geometry: pickupRequest.location,
@@ -24,6 +24,14 @@ const assignCollector = async (pickupRequest) => {
     })
     .sort({ activePickupCount: 1 }) // Least active pickups first
     .limit(1);
+
+    // Fallback: If no collector within 15km, find the absolute nearest available collector
+    if (collectors.length === 0) {
+      console.log(`No collector in ${RADIUS_KM}km. Finding absolute nearest...`);
+      collectors = await Collector.find({ availabilityStatus: true })
+        .sort({ activePickupCount: 1 })
+        .limit(1);
+    }
 
     if (collectors.length > 0) {
       const bestCollector = collectors[0];

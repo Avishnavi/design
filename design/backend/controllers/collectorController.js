@@ -193,24 +193,38 @@ const acceptRequest = async (req, res) => {
 const updatePickupStatus = async (req, res) => {
   try {
     const { requestId, status } = req.body;
+    console.log(`[DEBUG] Attempting status update for Request ${requestId} to status: ${status}`);
     
     if (!requestId) {
         return res.status(400).json({ success: false, message: 'Request ID is required' });
     }
 
-    const validStatuses = ['Assigned', 'On The Way', 'Collected', 'SentToDealer'];
+    const statusStr = String(status || '').trim();
+    const validStatuses = ['Assigned', 'On The Way', 'Arrived', 'Collected', 'SentToDealer'];
     
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({ success: false, message: 'Invalid status' });
+    // Case-insensitive matching to be safe
+    const normalizedStatus = validStatuses.find(s => s.toLowerCase() === statusStr.toLowerCase());
+    
+    if (!normalizedStatus) {
+      console.log(`[ERROR] Invalid status requested: "${statusStr}"`);
+      return res.status(400).json({ success: false, message: `Invalid status: ${statusStr}` });
     }
 
     const request = await PickupRequest.findById(requestId);
     if (!request) {
+        console.log(`[ERROR] Request not found: ${requestId}`);
         return res.status(404).json({ success: false, message: 'Request not found' });
     }
 
-    request.status = status;
+    // Auto-assign if it was pending
+    if (request.status === 'Pending') {
+        const collector = await Collector.findOne({ user: req.user.id });
+        request.assignedCollector = collector._id;
+    }
+
+    request.status = normalizedStatus;
     await request.save();
+    console.log(`[SUCCESS] Status updated to ${normalizedStatus} for Request ${requestId}`);
     
     if (status === 'SentToDealer') {
         try {

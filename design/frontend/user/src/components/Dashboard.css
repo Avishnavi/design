@@ -1,4 +1,4 @@
-.dashboard {
+.dashboard-wrapper {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -41,12 +41,21 @@
 /* Stats Summary Row */
 .stats-summary-row {
   background: white;
-  padding: 16px 24px;
+  padding: 20px 24px;
   border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   justify-content: space-around;
   box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 600px) {
+  .stats-summary-row {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .summary-divider { display: none; }
 }
 
 .summary-card {

@@ -35,19 +35,27 @@ const CollectorDashboard = () => {
     fetchData();
   }, [fetchData]);
 
-  // Live Location Tracking (High Precision)
+  // Optimized Live Location Tracking
   useEffect(() => {
     let watchId;
+    let lastUpdate = 0;
+    const UPDATE_INTERVAL = 30000; // Only update backend every 30 seconds
+
     if (navigator.geolocation) {
       watchId = navigator.geolocation.watchPosition(
         (position) => {
           const coords = [position.coords.longitude, position.coords.latitude];
           setCollectorLocation(coords);
-          // Debounced update to backend
-          collectorAPI.updateLocation(coords).catch(err => {});
+          
+          // Throttled update to backend to save resources
+          const now = Date.now();
+          if (now - lastUpdate > UPDATE_INTERVAL) {
+            collectorAPI.updateLocation(coords).catch(err => {});
+            lastUpdate = now;
+          }
         },
         (error) => console.error('GPS Watch Error:', error),
-        { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+        { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 }
       );
     }
     return () => {
@@ -55,10 +63,11 @@ const CollectorDashboard = () => {
     };
   }, []);
 
-  // Periodic data refresh
+  // Optimized periodic data refresh
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 20000);
+    // Refresh every 45 seconds instead of 20 to reduce server load
+    const interval = setInterval(fetchData, 45000);
     return () => clearInterval(interval);
   }, [fetchData]);
 
@@ -79,17 +88,21 @@ const CollectorDashboard = () => {
 
   const handleStatusUpdate = async (requestId, status) => {
     try {
-      await collectorAPI.updateStatus(requestId, status);
+      console.log(`[DEBUG] Sending status update: RequestID=${requestId}, Status=${status}`);
+      const response = await collectorAPI.updateStatus(requestId, status);
+      console.log(`[DEBUG] Update Response:`, response.data);
+      
       if (status === 'SentToDealer') {
         setActivePickup(null);
         setView('dashboard');
         fetchData();
         alert('Pickup delivered to Scrap Dealer!');
       } else {
-        setActivePickup(prev => ({ ...prev, status }));
+        setActivePickup(prev => ({ ...prev, status: response.data.data.status }));
       }
     } catch (error) {
-      alert('Failed to update status');
+      console.error('[ERROR] Failed to update status:', error.response?.data || error.message);
+      alert(`Failed to update status: ${error.response?.data?.message || 'Server Error'}`);
     }
   };
 
@@ -103,56 +116,83 @@ const CollectorDashboard = () => {
   }
 
   if (view === 'map' && activePickup) {
-    const hasCoordinates = activePickup.location?.coordinates && collectorLocation;
+    // Safety check: ensure coordinates exist and are valid [lng, lat]
+    const pickupCoords = activePickup.location?.coordinates;
+    const hasValidCoords = pickupCoords && pickupCoords.length === 2 && pickupCoords[0] !== 0;
     
     return (
       <div className="collector-active container">
-        <header className="module-header">
-          <button className="btn-back" onClick={() => setView('dashboard')}>← Back</button>
-          <h2>Navigation</h2>
+        <header className="module-header-new">
+          <div className="header-left-group">
+            <button className="btn-back-circle" onClick={() => setView('dashboard')}>✕</button>
+            <div className="header-title-box">
+              <h2>Navigation</h2>
+              <span className="status-indicator-dot"></span>
+            </div>
+          </div>
+          <button className="btn-external-nav" onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${pickupCoords[1]},${pickupCoords[0]}`)}>
+            Maps App
+          </button>
         </header>
         
-        {hasCoordinates ? (
-          <MapComponent 
-              userLocation={activePickup.location.coordinates} 
-              collectorLocation={collectorLocation} 
-          />
-        ) : (
-          <div className="map-error card">⚠️ GPS Signal Waiting...</div>
-        )}
-
-        <div className="pickup-details-card card">
-          <div className="pickup-info-header">
-            <h4>{activePickup.userId?.name || 'Guest User'}</h4>
-            {activePickup.location?.coordinates && (
-              <button 
-                className="btn-navigate" 
-                onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${activePickup.location.coordinates[1]},${activePickup.location.coordinates[0]}`)}
-              >
-                🚀 Navigate
-              </button>
-            )}
+        <div className="navigator-layout">
+          <div className="map-frame">
+            <MapComponent 
+                userLocation={pickupCoords} 
+                collectorLocation={collectorLocation} 
+                pickupStatus={activePickup.status}
+            />
           </div>
-          <p>{activePickup.pickupAddress || 'No address provided'}</p>
-          <div className="waste-badge">{activePickup.wasteType || 'General'} • {activePickup.quantity || 0}kg</div>
-          
-          <div className="status-action-row">
-             {activePickup.status === 'Assigned' && (
-               <button className="btn-status-update journey" onClick={() => handleStatusUpdate(activePickup._id, 'On The Way')}>
-                 ▶️ Start Journey
+
+          <div className="navigator-details-card">
+            <div className="customer-prime-info">
+              <div className="avatar-med">{activePickup.userId?.name?.charAt(0) || 'U'}</div>
+              <div className="name-addr">
+                <h4>{activePickup.userId?.name || 'Customer'}</h4>
+                <p>{activePickup.pickupAddress || 'Address not provided'}</p>
+              </div>
+            </div>
+
+            <div className="quick-stats-row">
+              <div className="q-stat">
+                <span className="q-label">WASTE</span>
+                <span className="q-value">{activePickup.wasteType || 'General'}</span>
+              </div>
+              <div className="q-stat">
+                <span className="q-label">WEIGHT</span>
+                <span className="q-value">{activePickup.quantity || 0} kg</span>
+              </div>
+              <div className="q-stat">
+                <span className="q-label">REWARD</span>
+                <span className="q-value">₹ {(activePickup.quantity || 0) * 12}</span>
+              </div>
+            </div>
+            
+            <div className="phase-control-box manual">
+               <button 
+                 className="btn-launch-maps" 
+                 onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${activePickup.location.coordinates[1]},${activePickup.location.coordinates[0]}`)}
+               >
+                 <span className="icon">🚀</span> Launch Google Maps
                </button>
-             )}
-             {activePickup.status === 'On The Way' && (
-               <button className="btn-status-update collect" onClick={() => handleStatusUpdate(activePickup._id, 'Collected')}>
-                 📦 Mark as Collected
-               </button>
-             )}
-             {activePickup.status === 'Collected' && (
-               <button className="btn-status-update deliver" onClick={() => handleStatusUpdate(activePickup._id, 'SentToDealer')}>
-                 🏭 Deliver to Dealer
-               </button>
-             )}
-             <div className="current-status-tag">Status: <strong>{activePickup.status}</strong></div>
+
+               <div className="manual-update-section">
+                 <label className="manual-label">Update Status Manually</label>
+                 <select 
+                   className="status-dropdown-fancy"
+                   value={activePickup.status}
+                   onChange={(e) => handleStatusUpdate(activePickup._id, e.target.value)}
+                 >
+                   <option value="Assigned">Assigned (Ready)</option>
+                   <option value="On The Way">On The Way (Traveling)</option>
+                   <option value="Arrived">Arrived (At Location)</option>
+                   <option value="Collected">Collected (Waste Picked)</option>
+                   <option value="SentToDealer">Handed Over (To Dealer)</option>
+                 </select>
+               </div>
+               
+               <div className="phase-text">Current State: <strong>{activePickup.status}</strong></div>
+            </div>
           </div>
         </div>
       </div>
@@ -161,54 +201,82 @@ const CollectorDashboard = () => {
 
   return (
     <div className="collector-dashboard container">
-      <header className="dashboard__header">
-        <div className="header-row">
-          <h1>Collector Portal 🚚</h1>
-          <button className="btn-history-toggle" onClick={() => setView('history')}>
-            View History
-          </button>
+      <header className="dashboard-header-new">
+        <div className="header-text">
+          <h1>Operations Dashboard</h1>
+          <p>You are currently <strong>Online</strong> and discovering pickups.</p>
         </div>
-        <p>Available pickups in your area</p>
+        <button className="btn-history-pill" onClick={() => setView('history')}>
+          📜 History
+        </button>
       </header>
 
-      <div className="collector-stats-row">
-        <div className="c-stat">
-          <span className="c-stat-val">{stats.activePickups || 0}</span>
-          <span className="c-stat-lbl">Active</span>
+      <div className="stats-grid-new">
+        <div className="stat-card-new">
+          <div className="stat-icon-bg green">📈</div>
+          <div className="stat-content">
+            <span className="stat-value">{stats.activePickups || 0}</span>
+            <span className="stat-label">Active Requests</span>
+          </div>
         </div>
-        <div className="c-stat">
-          <span className="c-stat-val">₹ {stats.earnings || 0}</span>
-          <span className="c-stat-lbl">Earnings</span>
+        <div className="stat-card-new">
+          <div className="stat-icon-bg blue">💰</div>
+          <div className="stat-content">
+            <span className="stat-value">₹ {stats.earnings || 0}</span>
+            <span className="stat-label">Total Earnings</span>
+          </div>
         </div>
       </div>
 
       <section className="pickups-section">
-        <h3 className="section-title">Pickup Requests</h3>
+        <div className="section-header">
+          <h3 className="section-title">Incoming Tasks</h3>
+          <span className="live-indicator">
+            <span className="dot"></span> LIVE
+          </span>
+        </div>
+        
         {loading ? (
-          <p>Loading requests...</p>
+          <div className="loading-state">
+            <div className="spinner-sm"></div>
+            <p>Scanning for nearby waste...</p>
+          </div>
         ) : (
-          <div className="pickups-list">
+          <div className="pickups-list-new">
             {pendingPickups.length === 0 ? (
-                <p className="empty-msg">No pending requests.</p>
+                <div className="empty-state-card">
+                  <span className="empty-icon">📭</span>
+                  <p>All clear! No pending requests in your area.</p>
+                </div>
             ) : (
                 pendingPickups.map(pickup => (
-                <div key={pickup._id} className="pickup-row-card card">
-                    <div className="pickup-main-info">
-                    <div className="pickup-loc">
-                        <h4>{pickup.userId?.name || 'User'}</h4>
+                <div key={pickup._id} className="pickup-item-card">
+                    <div className="pickup-main">
+                      <div className="user-brief-new">
+                        <div className="user-avatar-sm">{pickup.userId?.name?.charAt(0) || 'U'}</div>
+                        <div className="user-meta">
+                          <h4>{pickup.userId?.name || 'Guest User'}</h4>
+                          <span className="time-ago">{new Date(pickup.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        </div>
+                      </div>
+                      <div className="pickup-address-box">
+                        <span className="loc-icon">📍</span>
                         <p>{pickup.pickupAddress}</p>
-                        <small>{pickup.wasteType} • {pickup.quantity}kg • {new Date(pickup.createdAt).toLocaleDateString()}</small>
-                    </div>
-                    <div className="pickup-est"><span className="est-tag">{pickup.status}</span></div>
+                      </div>
+                      <div className="pickup-tags">
+                        <span className="tag type">{pickup.wasteType}</span>
+                        <span className="tag weight">{pickup.quantity} kg</span>
+                        <span className={`tag status-chip ${pickup.status.toLowerCase()}`}>{pickup.status}</span>
+                      </div>
                     </div>
                     
-                    <div className="pickup-actions">
+                    <div className="pickup-footer">
                         {pickup.status === 'Pending' ? (
-                            <button className="btn-accept" onClick={() => handleAccept(pickup._id)}>Accept</button>
+                            <button className="btn-action accept" onClick={() => handleAccept(pickup._id)}>Accept Task</button>
                         ) : (
-                            <button className="btn-map" onClick={() => showOnMap(pickup)}>View on Map</button>
+                            <button className="btn-action navigate" onClick={() => showOnMap(pickup)}>Open Navigator</button>
                         )}
-                        <button className="btn-reject-outline" onClick={() => handleReject(pickup._id)}>Reject</button>
+                        <button className="btn-action-outline" onClick={() => handleReject(pickup._id)}>Pass</button>
                     </div>
                 </div>
                 ))
