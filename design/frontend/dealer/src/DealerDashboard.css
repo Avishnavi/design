@@ -1,0 +1,218 @@
+.dealer-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7f6;
+}
+
+.sidebar {
+  width: 260px;
+  background: #2d3436;
+  color: white;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  padding: 0 24px 32px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #00b894;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-nav button {
+  background: none;
+  border: none;
+  padding: 16px 24px;
+  text-align: left;
+  color: #b2bec3;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.sidebar-nav button:hover {
+  background: #3d4446;
+  color: white;
+}
+
+.sidebar-nav button.active {
+  background: #3d4446;
+  color: white;
+  border-left: 4px solid #00b894;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary {
+  background: #00b894;
+  color: white;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.btn-secondary {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* Inventory Styles */
+.stats-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  flex: 1;
+  padding: 24px;
+}
+
+.stat-box span {
+  font-size: 0.9rem;
+  color: #636e72;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-box h3 {
+  font-size: 1.8rem;
+  margin-top: 4px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 16px 24px;
+  background: #f9f9f9;
+  font-size: 0.9rem;
+  color: #636e72;
+}
+
+.data-table td {
+  padding: 16px 24px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.grade-badge {
+  background: #e1f5fe;
+  color: #0288d1;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* Fleet Styles */
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.fleet-card {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.fleet-avatar {
+  width: 50px;
+  height: 50px;
+  background: #eee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.fleet-info h4 {
+  margin-bottom: 4px;
+}
+
+.fleet-info p {
+  font-size: 0.85rem;
+  color: #636e72;
+  margin-bottom: 8px;
+}
+
+.status-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.status-tag.active { background: #e3f9f1; color: #00b894; }
+.status-tag.idle { background: #fff5e6; color: #ff9f43; }
+
+.btn-assign {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: #f1f2f6;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Marketplace Styles */
+.offers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.offer-card {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.offer-main p {
+  color: #636e72;
+  margin-top: 4px;
+}
+
+.offer-price {
+  text-align: center;
+}
+
+.offer-price span {
+  font-size: 0.8rem;
+  color: #636e72;
+}
