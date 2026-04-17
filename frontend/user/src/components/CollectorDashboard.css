@@ -1,0 +1,276 @@
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.btn-mode-switch {
+  background: #f1f2f6;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-reject-outline {
+  flex: 1;
+  background: transparent;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  padding: 12px;
+  font-weight: 600;
+}
+
+.btn-assign {
+  flex: 2;
+  background: #2d3436;
+  color: white;
+  padding: 12px;
+  font-weight: 700;
+}
+
+.btn-accept {
+  flex: 2;
+  background: var(--primary-gradient);
+  color: white;
+  padding: 12px;
+  font-weight: 700;
+}
+
+.collector-stats-row {
+  display: flex;
+  justify-content: space-between;
+  background: var(--secondary);
+  color: white;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+}
+
+.c-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-stat-val {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.c-stat-lbl {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.pickups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pickup-row-card {
+  padding: 20px;
+}
+
+.pickup-main-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pickup-loc h4 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.pickup-loc p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.est-tag {
+  background: rgba(0, 184, 148, 0.1);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.pickup-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-view-map {
+  flex: 1;
+  background: #f1f2f6;
+  color: var(--text-main);
+  padding: 12px;
+  font-weight: 600;
+}
+
+.btn-accept {
+  flex: 2;
+  background: var(--primary-gradient);
+  color: white;
+  padding: 12px;
+  font-weight: 700;
+}
+
+/* Active Pickup Styles */
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.btn-back {
+  background: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tracking-map-placeholder {
+  height: 200px;
+  background: #dfe6e9;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.map-ui {
+  height: 100%;
+  position: relative;
+}
+
+.map-marker {
+  position: absolute;
+  font-size: 1.5rem;
+}
+
+.map-marker.user { top: 20%; left: 70%; }
+.map-marker.collector { bottom: 20%; left: 20%; }
+
+.map-info {
+  background: rgba(255,255,255,0.9);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.user-brief {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.avatar-sm {
+  width: 40px;
+  height: 40px;
+  background: #0984e3;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.waste-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #f1f2f6;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.action-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.btn-navigate, .btn-call {
+  flex: 1;
+  padding: 14px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+.btn-arrive {
+  width: 100%;
+  padding: 20px;
+  background: #2d3436;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Verification Styles */
+.verify-card {
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.weight-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.weight-input-group input {
+  width: 120px;
+  padding: 15px;
+  font-size: 1.5rem;
+  text-align: center;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+}
+
+.weight-input-group span {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.photo-upload-placeholder {
+  border: 2px dashed #ccc;
+  padding: 40px 20px;
+  border-radius: var(--border-radius);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.btn-complete {
+  width: 100%;
+  padding: 20px;
+  background: var(--primary-gradient);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.btn-complete:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

@@ -1,0 +1,140 @@
+:root {
+  /* Core Colors (Light Premium Theme) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --primary-light: #34d399;
+  --primary-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  --primary-glow: rgba(16, 185, 129, 0.2);
+  
+  --secondary: #2d3436;
+  --accent: #fab1a0;
+  --bg-light: #f9fbfd;
+  
+  /* Glass and Borders */
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(226, 232, 240, 0.8);
+  
+  /* Text */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --white: #ffffff;
+  
+  /* Shadows */
+  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 15px 0 var(--primary-glow);
+  
+  /* Geometry */
+  --border-radius: 20px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  
+  /* Transitions */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at top right, #e3f2fd, #f9fbfd);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Ensure no scrollbars on the body itself */
+}
+
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.container {
+  padding: 24px;
+  width: 100%;
+  max-width: 100%; /* Fully expand the dashboard */
+  margin: 0;
+  padding-bottom: 80px; 
+  box-sizing: border-box;
+}
+
+/* Status Banner */
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 12px 20px;
+  margin: 0 20px 20px 20px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--primary);
+}
+
+.status-banner.searching {
+  border-left-color: #f1c40f;
+}
+
+.status-banner p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Loader Animation */
+.loader {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #f1c40f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Notification Overlay Styles */
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.notif-header button {
+  background: none;
+  font-size: 1rem;
+  color: #999;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
