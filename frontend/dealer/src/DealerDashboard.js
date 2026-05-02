@@ -27,7 +27,7 @@ const DealerDashboard = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/${endpoint}`, {
+      const response = await fetch(${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/${endpoint}`, ...)`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -74,7 +74,7 @@ const DealerDashboard = () => {
     setUpdateMsg('');
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/dealer/update-profile', {
+      const response = await fetch(${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/dealer/update-profile`, ...)`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ const DealerDashboard = () => {
   const handleVerify = async (deliveryId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/dealer/verify-waste', {
+      const response = await fetch(${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/dealer/verify-waste`, ...)`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const DealerDashboard = () => {
     }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/dealer/sell-to-recycler', {
+      const response = await fetch(${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/dealer/sell-to-recycler`, ...)`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
