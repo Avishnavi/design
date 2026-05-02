@@ -55,7 +55,7 @@ function App() {
   const handleAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const url = `http://localhost:5000/api/auth/${isRegistering ? 'register' : 'login'}`;
+    const url = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/${isRegistering ? 'register' : 'login'}`;
     try {
       const res = await fetch(url, {
         method: 'POST',
