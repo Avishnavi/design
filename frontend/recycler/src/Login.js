@@ -12,7 +12,7 @@ const Login = ({ setToken, onSwitch }) => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { 
+      const res = await axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/login`, {
         email, 
         password, 
         role: 'recycler' 

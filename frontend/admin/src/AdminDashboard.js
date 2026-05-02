@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
        const token = localStorage.getItem('token') || '';
-       const res = await fetch(`http://localhost:5000/api/admin/${endpoint}`, {
+       const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/admin/${endpoint}`, {
          headers: { 'Authorization': `Bearer ${token}` }
        });
        if (!res.ok) throw new Error('Data fetch failed');
@@ -35,28 +35,28 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     if(!window.confirm("Are you sure you want to completely erase this user profile and all attached entities from the database?")) return;
     try {
-      await fetch(`http://localhost:5000/api/admin/user/${id}`, { method: 'DELETE' });
+      await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/admin/user/${id}`, { method: 'DELETE' });
       fetchData('all-users', setDataList);
     } catch(err) { console.error(err); }
   };
 
   const handleToggleCollector = async (id) => {
     try {
-       await fetch(`http://localhost:5000/api/admin/toggle-collector/${id}`, { method: 'PUT' });
+       await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/admin/toggle-collector/${id}`, { method: 'PUT' });
        fetchData('all-collectors', setDataList);
     } catch(err) { console.error(err); }
   }
 
   const handleToggleDealer = async (id) => {
     try {
-       await fetch(`http://localhost:5000/api/admin/approve-dealer/${id}`, { method: 'PUT' });
+       await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/admin/approve-dealer/${id}`, { method: 'PUT' });
        fetchData('all-dealers', setDataList);
     } catch(err) { console.error(err); }
   }
 
   const handleToggleRecycler = async (id) => {
     try {
-       await fetch(`http://localhost:5000/api/admin/approve-recycler/${id}`, { method: 'PUT' });
+       await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/admin/approve-recycler/${id}`, { method: 'PUT' });
        fetchData('all-recyclers', setDataList);
     } catch(err) { console.error(err); }
   }
