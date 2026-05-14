@@ -852,4 +852,17 @@
   color: white;
 }
 
+html, body {
+  overflow-y: auto;
+  height: auto;
+}
 
+.collector-dashboard {
+  min-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
+
+.container {
+  overflow-y: auto;
+}
