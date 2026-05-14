@@ -3,43 +3,46 @@
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
-  
+
   --primary: #10b981;
   --primary-dark: #059669;
   --primary-light: #34d399;
   --primary-gradient: linear-gradient(135deg, #10b981 0%, #34d399 100%);
   --primary-glow: rgba(16, 185, 129, 0.2);
-  
+
   --secondary: #2d3436;
   --accent: #fab1a0;
   --bg-light: #f9fbfd;
-  
+
   /* Glass and Borders */
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(226, 232, 240, 0.8);
-  
+
   /* Text */
   --text-main: #1e293b;
   --text-muted: #64748b;
   --text-dim: #94a3b8;
   --white: #ffffff;
-  
+
   /* Shadows */
   --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.02);
   --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   --shadow-glow: 0 0 15px 0 var(--primary-glow);
-  
+
   /* Geometry */
   --border-radius: 20px;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 24px;
-  
+
   /* Transitions */
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-html, body {
+
+
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-y: auto !important;
@@ -48,7 +51,10 @@ html, body {
   min-height: 100vh !important;
 }
 
-#root, .App, .collector-dashboard, .container {
+#root,
+.App,
+.collector-dashboard,
+.container {
   height: auto !important;
   min-height: 100vh !important;
   overflow-y: visible !important;
@@ -72,9 +78,10 @@ body {
 .container {
   padding: 24px;
   width: 100%;
-  max-width: 100%; /* Fully expand the dashboard */
+  max-width: 100%;
+  /* Fully expand the dashboard */
   margin: 0;
-  padding-bottom: 80px; 
+  padding-bottom: 80px;
   box-sizing: border-box;
 }
 
@@ -112,8 +119,13 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Notification Overlay Styles */
@@ -132,7 +144,9 @@ body {
   color: #999;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 700;
   margin-bottom: 1rem;
 }
