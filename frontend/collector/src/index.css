@@ -52,13 +52,21 @@ body {
 }
 
 #root,
-.App,
-.collector-dashboard,
-.container {
+.App {
+  display: flex !important;
+  flex-direction: column !important;
   height: auto !important;
   min-height: 100vh !important;
   overflow-y: visible !important;
+}
+
+.collector-dashboard,
+.container {
+  height: auto !important;
+  min-height: min-content !important;
+  overflow-y: visible !important;
   display: block !important;
+  padding-bottom: 250px !important; /* Massive padding to prevent cutoff */
 }
 
 body {
