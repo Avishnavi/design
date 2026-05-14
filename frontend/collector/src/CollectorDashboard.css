@@ -123,7 +123,7 @@
 .pickup-item-card {
   background: white;
   border-radius: 24px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 20px rgba(0,0,0,0.04);
   border: 1px solid #f0f4f8;
   transition: transform 0.2s ease;
