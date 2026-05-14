@@ -196,15 +196,21 @@
 }
 
 /* Split Pane Login Layout for Collector */
-.login-split-container {
+/* .login-split-container {
   height: 100vh;
   width: 100vw;
   display: flex;
   overflow: hidden; /* Prevent all scrolling */
-  background: white;
+  /* background: white;
   position: fixed;
   top: 0;
   left: 0;
+} */ 
+.login-split-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background: white;
 }
 
 .login-hero-side {
@@ -381,4 +387,23 @@
   border: 1px solid #ffcccc;
   border-radius: 8px;
   cursor: pointer;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+}
+
+.collector-dashboard {
+  width: 100%;
+  min-height: 100vh;
+  overflow-y: visible;
 }
