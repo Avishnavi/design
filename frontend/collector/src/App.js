@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import './index.css';
+// import './index.css';
 import CollectorDashboard from './CollectorDashboard';
 import { authAPI } from './api';
 
