@@ -39,7 +39,21 @@
   /* Transitions */
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
 
+#root, .App, .collector-dashboard, .container {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-y: visible !important;
+  display: block !important;
+}
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
